@@ -1,0 +1,55 @@
+
+call plug#begin('~/.vim/plugged')
+
+Plug 'Shougo/unite.vim'
+Plug 'Shougo/neomru.vim'
+Plug 'tpope/vim-fugitive'
+
+Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+Plug 'vim-scripts/AnsiEsc.vim'
+Plug 'bronson/vim-trailing-whitespace'
+
+call plug#end()
+
+set noswapfile
+set noundofile
+set ruler
+set cmdheight=2
+set laststatus=2
+set title
+set wildmenu
+set showcmd
+set smartcase
+set hlsearch
+set background=dark
+set expandtab
+set incsearch
+set hidden
+set list
+set listchars=tab:>\ ,extends:<
+set showmatch
+set autoindent
+set smartindent
+set tabstop=2
+set shiftwidth=2
+set smarttab
+syntax on
+colorscheme desert
+set synmaxcol=200
+autocmd QuickFixCmdPost *grep* cwindow
+
+function! ZenkakuSpace()
+    highlight ZenkakuSpace cterm=underline ctermfg=lightblue guibg=darkgray
+endfunction
+
+if has('syntax')
+    augroup ZenkakuSpace
+        autocmd!
+        autocmd ColorScheme * call ZenkakuSpace()
+        autocmd VimEnter,WinEnter,BufRead * let w:m1=matchadd('ZenkakuSpace', '　')
+    augroup END
+    call ZenkakuSpace()
+endif
+
+filetype on
+
