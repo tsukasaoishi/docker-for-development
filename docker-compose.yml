@@ -1,5 +1,6 @@
 version: "3.7"
 services:
+
   garage:
     restart: always
     build:
@@ -8,18 +9,28 @@ services:
         USER: "tsukasa"
         RUBY_VER: "2.6.1"
         NODE_VER: "10.15.1"
+        PYTHON_VER: "3.7.2"
+        GO_VER: "1.11.5"
     ports:
       - "3000:3000"
     volumes:
       - ./data/garage:/home/tsukasa/develop
     tty: true
+
   percona-db:
     restart: always
     image: percona:8
-    ports:
-      - "3306:3306"
     volumes:
       - ./data/percona-db:/var/lib/mysql
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_ROOT_PASSWORD: ""
+
+  postgres-db:
+    restart: always
+    image: postgres:11
+    volumes:
+      - ./data/postgres-db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: tsukasa
+      POSTGRES_PASSWORD: tsukasa
