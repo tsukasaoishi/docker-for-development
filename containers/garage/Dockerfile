@@ -1,12 +1,19 @@
 FROM centos:7
 MAINTAINER tsukasa.oishi@gmail.com
+
 ARG USER
 ARG RUBY_VER
+ARG NODE_VER
 
+# Add mysql repo
+RUN rpm -Uvh http://dev.mysql.com/get/mysql80-community-release-el7-1.noarch.rpm
+
+# install packages
 RUN yum -y update && yum install -y \
   epel-release \
   autoconf \
   automake \
+  bind-utils \
   bison \
   bzip2 \
   curl-devel \
@@ -24,7 +31,7 @@ RUN yum -y update && yum install -y \
   libXt \
   libyaml-devel \
   make \
-  mysql-devel \
+  mysql-community-devel \
   openssl-devel \
   patch \
   procps \
@@ -45,12 +52,6 @@ RUN yum -y update && yum install -y \
 # install git lfs
 RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.rpm.sh | sudo bash
 RUN yum install -y git-lfs && yum clean all
-
-# install imagemagick
-#RUN yum install -y \
-#  https://www.imagemagick.org/download/linux/CentOS/x86_64/ImageMagick-libs-7.0.8-26.x86_64.rpm \
-#  https://www.imagemagick.org/download/linux/CentOS/x86_64/ImageMagick-7.0.8-26.x86_64.rpm \
-#  && yum clean all
 
 # Create User
 RUN useradd -m ${USER}
@@ -73,10 +74,13 @@ RUN curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubuserconte
 COPY vimrc .vimrc
 RUN vim -c PlugInstall -c q -c q
 
-# install rbenv
+# install rbenv & ndenc
 RUN git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
-RUN git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-buildv
+RUN git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
+RUN git clone https://github.com/riywo/ndenv.git ~/.ndenv
+RUN git clone https://github.com/riywo/node-build.git ~/.ndenv/plugins/node-build
 RUN source .zshrc; rbenv install ${RUBY_VER}; rbenv global ${RUBY_VER}; gem install bundler
+RUN source .zshrc; ndenv install ${NODE_VER}; ndenv global ${NODE_VER}
 
 # git config
 RUN git config --global user.name "Tsukasa OISHI"

@@ -2,13 +2,24 @@ version: "3.7"
 services:
   garage:
     restart: always
-    build: 
+    build:
       context: containers/garage
       args:
         USER: "tsukasa"
         RUBY_VER: "2.6.1"
+        NODE_VER: "10.15.1"
     ports:
       - "3000:3000"
     volumes:
       - ./data/garage:/home/tsukasa/develop
     tty: true
+  percona-db:
+    restart: always
+    image: percona:8
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data/percona-db:/var/lib/mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_ROOT_PASSWORD: ""
