@@ -11,6 +11,8 @@ services:
         NODE_VER: "10.15.1"
         PYTHON_VER: "3.7.2"
         GO_VER: "1.11.5"
+        GIT_USER: "Tsukasa OISHI"
+        GIT_MAILADDRESS: "tsukasa.oishi@gmail.com"
     ports:
       - "3000:3000"
     volumes:
@@ -32,5 +34,13 @@ services:
     volumes:
       - ./data/postgres-db:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: tsukasa
-      POSTGRES_PASSWORD: tsukasa
+      POSTGRES_USER: "tsukasa"
+      POSTGRES_PASSWORD: ""
+
+  memcached:
+    restart: always
+    image: memcached:1.5
+
+  redis:
+    restart: always
+    image: redis:5.0

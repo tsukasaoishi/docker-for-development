@@ -6,6 +6,8 @@ ARG RUBY_VER
 ARG NODE_VER
 ARG PYTHON_VER
 ARG GO_VER
+ARG GIT_USER
+ARG GIT_MAILADDRESS
 
 # Add mysql & postgres repo
 RUN rpm -Uvh http://dev.mysql.com/get/mysql80-community-release-el7-1.noarch.rpm
@@ -100,10 +102,11 @@ RUN source .zshrc; pyenv install ${PYTHON_VER}; pyenv global ${PYTHON_VER}
 RUN source .zshrc; goenv install ${GO_VER}; goenv global ${GO_VER}
 
 # git config
-RUN git config --global user.name "Tsukasa OISHI"
-RUN git config --global user.email "tsukasa.oishi@gmail.com"
+RUN git config --global user.name "${GIT_USER}"
+RUN git config --global user.email "${GIT_MAILADDRESS}"
 RUN git config --global color.ui true
 RUN git config --global alias.stat status
+RUN git config --global core.editor vim
 
 # prepare workspace
 RUN mkdir develop
