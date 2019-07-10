@@ -108,8 +108,8 @@ source $ZSH/oh-my-zsh.sh
 
 export PYENV_ROOT="$HOME/.pyenv"
 export GOENV_ROOT="$HOME/.goenv"
-export PATH="$HOME/.rbenv/bin:$HOME/.ndenv/bin:$PYENV_ROOT/bin:$GOENV_ROOT/bin:$PATH"
+export PATH="$HOME/.rbenv/bin:$HOME/.nodenv/bin:$PYENV_ROOT/bin:$GOENV_ROOT/bin:$PATH"
 eval "$(rbenv init -)"
-eval "$(ndenv init -)"
+eval "$(nodenv init -)"
 eval "$(pyenv init -)"
 eval "$(goenv init -)"

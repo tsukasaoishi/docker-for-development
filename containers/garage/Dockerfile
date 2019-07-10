@@ -60,11 +60,19 @@ RUN yum -y update && yum install -y \
 RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.rpm.sh | sudo bash
 RUN yum install -y git-lfs && yum clean all
 
+# install gcloud & kubectl
+COPY google-cloud-sdk.repo /etc/yum.repos.d/google-cloud-sdk.repo
+RUN yum install -y google-cloud-sdk kubectl && yum clean all
+
 # Create User
 RUN useradd -m ${USER}
 RUN echo "${USER}:${USER}" | chpasswd
 RUN echo "${USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 RUN chsh ${USER} -s /bin/zsh
+
+# locale
+RUN localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
+ENV LANG="ja_JP.UTF-8" LANGUAGE="ja_JP:ja" LC_ALL="ja_JP.UTF-8"
 
 # switch user
 USER ${USER}
@@ -85,9 +93,13 @@ RUN vim -c PlugInstall -c q -c q
 RUN git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
 RUN git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
 
-# install ndenv
-RUN git clone https://github.com/riywo/ndenv.git ~/.ndenv
-RUN git clone https://github.com/riywo/node-build.git ~/.ndenv/plugins/node-build
+# install nodenv
+RUN git clone https://github.com/nodenv/nodenv.git ~/.nodenv
+WORKDIR /home/${USER}/.nodenv
+RUN src/configure && make -C src
+RUN mkdir -p ~/.nodenv/plugins
+RUN git clone https://github.com/nodenv/node-build.git ~/.nodenv/plugins/node-build
+WORKDIR /home/${USER}
 
 # install pyenv
 RUN git clone git://github.com/yyuu/pyenv.git ~/.pyenv
@@ -97,7 +109,7 @@ RUN git clone https://github.com/syndbg/goenv.git ~/.goenv
 
 # install ruby & node & python & golang
 RUN source .zshrc; rbenv install ${RUBY_VER}; rbenv global ${RUBY_VER}
-RUN source .zshrc; ndenv install ${NODE_VER}; ndenv global ${NODE_VER}
+RUN source .zshrc; nodenv install ${NODE_VER}; nodenv global ${NODE_VER}
 RUN source .zshrc; pyenv install ${PYTHON_VER}; pyenv global ${PYTHON_VER}
 RUN source .zshrc; goenv install ${GO_VER}; goenv global ${GO_VER}
 

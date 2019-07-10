@@ -7,23 +7,25 @@ services:
       context: containers/garage
       args:
         USER: "tsukasa"
-        RUBY_VER: "2.6.1"
-        NODE_VER: "10.15.1"
-        PYTHON_VER: "3.7.2"
-        GO_VER: "1.11.5"
+        RUBY_VER: "2.6.3"
+        NODE_VER: "10.16.0"
+        PYTHON_VER: "3.7.3"
+        GO_VER: "1.12.6"
         GIT_USER: "Tsukasa OISHI"
         GIT_MAILADDRESS: "tsukasa.oishi@gmail.com"
     ports:
       - "3000:3000"
     volumes:
-      - ./data/garage:/home/tsukasa/develop
+      - ./data/garage/develop:/home/tsukasa/develop:cached
+      - ./data/garage/.ssh:/home/tsukasa/.ssh:cached
+      - ./data/garage/.config:/home/tsukasa/.config:cached
     tty: true
 
   percona-db:
     restart: always
     image: percona:8
     volumes:
-      - ./data/percona-db:/var/lib/mysql
+      - ./data/percona-db:/var/lib/mysql:cached
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_ROOT_PASSWORD: ""
@@ -32,7 +34,7 @@ services:
     restart: always
     image: postgres:11
     volumes:
-      - ./data/postgres-db:/var/lib/postgresql/data
+      - ./data/postgres-db:/var/lib/postgresql/data:cached
     environment:
       POSTGRES_USER: "tsukasa"
       POSTGRES_PASSWORD: ""
@@ -44,3 +46,6 @@ services:
   redis:
     restart: always
     image: redis:5.0
+
+  httpd:
+    image: httpd:latest
