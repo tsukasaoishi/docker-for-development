@@ -99,6 +99,7 @@ WORKDIR /home/${USER}/.nodenv
 RUN src/configure && make -C src
 RUN mkdir -p ~/.nodenv/plugins
 RUN git clone https://github.com/nodenv/node-build.git ~/.nodenv/plugins/node-build
+RUN git clone https://github.com/pine/nodenv-yarn-install.git ~/.nodenv/plugins/nodenv-yarn-install
 WORKDIR /home/${USER}
 
 # install pyenv
