@@ -8,7 +8,7 @@ services:
       args:
         USER: "tsukasa"
         RUBY_VER: "2.6.3"
-        NODE_VER: "10.16.0"
+        NODE_VER: "12.6.0"
         PYTHON_VER: "3.7.3"
         GO_VER: "1.12.6"
         GIT_USER: "Tsukasa OISHI"

@@ -114,6 +114,9 @@ RUN source .zshrc; nodenv install ${NODE_VER}; nodenv global ${NODE_VER}
 RUN source .zshrc; pyenv install ${PYTHON_VER}; pyenv global ${PYTHON_VER}
 RUN source .zshrc; goenv install ${GO_VER}; goenv global ${GO_VER}
 
+# install aws cli
+RUN source .zshrc; pip install awscli
+
 # git config
 RUN git config --global user.name "${GIT_USER}"
 RUN git config --global user.email "${GIT_MAILADDRESS}"
@@ -123,4 +126,3 @@ RUN git config --global core.editor vim
 
 # prepare workspace
 RUN mkdir develop
-
