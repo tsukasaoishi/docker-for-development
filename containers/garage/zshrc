@@ -63,10 +63,10 @@ ZSH_THEME="robbyrussell"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  git 
-  bundler 
-  rake 
-  rbenv 
+  git
+  bundler
+  rake
+  rbenv
   ruby
   aws
   gem
@@ -108,7 +108,7 @@ source $ZSH/oh-my-zsh.sh
 
 export PYENV_ROOT="$HOME/.pyenv"
 export GOENV_ROOT="$HOME/.goenv"
-export PATH="$HOME/.rbenv/bin:$HOME/.nodenv/bin:$PYENV_ROOT/bin:$GOENV_ROOT/bin:$PATH"
+export PATH="$HOME/.nodenv/bin:$PYENV_ROOT/bin:$GOENV_ROOT/bin:/usr/pgsql-11/bin:$PATH"
 eval "$(rbenv init -)"
 eval "$(nodenv init -)"
 eval "$(pyenv init -)"

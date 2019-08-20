@@ -6,19 +6,19 @@ services:
     build:
       context: containers/garage
       args:
-        USER: "tsukasa"
+        USER: ${USER}
         RUBY_VER: "2.6.3"
-        NODE_VER: "12.6.0"
-        PYTHON_VER: "3.7.3"
-        GO_VER: "1.12.6"
+        NODE_VER: "12.8.1"
+        PYTHON_VER: "3.7.4"
+        GO_VER: "1.12.9"
         GIT_USER: "Tsukasa OISHI"
         GIT_MAILADDRESS: "tsukasa.oishi@gmail.com"
     ports:
       - "3000:3000"
     volumes:
-      - ./data/garage/develop:/home/tsukasa/develop:cached
-      - ./data/garage/.ssh:/home/tsukasa/.ssh:cached
-      - ./data/garage/.config:/home/tsukasa/.config:cached
+      - ./data/garage/develop:/home/${USER}/develop:cached
+      - ./data/garage/.ssh:/home/${USER}/.ssh:cached
+      - ./data/garage/.config:/home/${USER}/.config:cached
     tty: true
 
   percona-db:
