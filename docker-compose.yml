@@ -7,10 +7,10 @@ services:
       context: containers/garage
       args:
         USER: ${USER}
-        RUBY_VER: "2.7.0"
-        NODE_VER: "12.14.0"
-        PYTHON_VER: "3.8.1"
-        GO_VER: "1.13.5"
+        RUBY_VER: "2.7.1"
+        NODE_VER: "12.16.2"
+        PYTHON_VER: "3.8.2"
+        GO_VER: "1.14.2"
         GIT_USER: "Tsukasa OISHI"
         GIT_MAILADDRESS: "tsukasa.oishi@gmail.com"
     ports:
@@ -26,6 +26,15 @@ services:
     image: percona:8
     volumes:
       - ./data/percona-db:/var/lib/mysql:cached
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_ROOT_PASSWORD: ""
+
+  percona-db-replica:
+    restart: always
+    image: percona:8
+    volumes:
+      - ./data/percona-db-replica:/var/lib/mysql:cached
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_ROOT_PASSWORD: ""
