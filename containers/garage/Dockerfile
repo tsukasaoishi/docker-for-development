@@ -11,7 +11,7 @@ ARG GIT_MAILADDRESS
 
 # Add mysql & postgres repo
 RUN rpm -Uvh http://dev.mysql.com/get/mysql80-community-release-el7-1.noarch.rpm
-RUN rpm -Uhv https://download.postgresql.org/pub/repos/yum/11/redhat/rhel-7-x86_64/pgdg-centos11-11-2.noarch.rpm
+RUN rpm -Uhv https://download.postgresql.org/pub/repos/yum/12/redhat/rhel-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
 
 # install packages
 RUN yum -y update && yum install -y \
@@ -45,7 +45,6 @@ RUN yum -y update && yum install -y \
   readline \
   readline-devel \
   screen \
-  sqlite-devel \
   sudo \
   tar \
   vim \
@@ -73,6 +72,13 @@ RUN chsh ${USER} -s /bin/zsh
 # locale
 RUN localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
 ENV LANG="ja_JP.UTF-8" LANGUAGE="ja_JP:ja" LC_ALL="ja_JP.UTF-8"
+
+# sqlite3
+WORKDIR /tmp
+RUN wget https://www.sqlite.org/2020/sqlite-autoconf-3310100.tar.gz \
+    && tar xfz sqlite-autoconf-3310100.tar.gz
+WORKDIR /tmp/sqlite-autoconf-3310100
+RUN ./configure && make && make install
 
 # switch user
 USER ${USER}
@@ -123,6 +129,7 @@ RUN git config --global user.email "${GIT_MAILADDRESS}"
 RUN git config --global color.ui true
 RUN git config --global alias.stat status
 RUN git config --global core.editor vim
+
 
 # prepare workspace
 RUN mkdir develop
