@@ -1,4 +1,4 @@
-FROM centos:7
+FROM centos:8
 MAINTAINER tsukasa.oishi@gmail.com
 
 ARG USER
@@ -10,18 +10,26 @@ ARG GIT_USER
 ARG GIT_MAILADDRESS
 
 # Add mysql & postgres repo
-RUN rpm -Uvh http://dev.mysql.com/get/mysql80-community-release-el7-1.noarch.rpm
-RUN rpm -Uhv https://download.postgresql.org/pub/repos/yum/12/redhat/rhel-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+RUN dnf localinstall -y \
+  http://dev.mysql.com/get/mysql80-community-release-el8-1.noarch.rpm \
+  https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm \
+  && dnf -y module disable postgresql
 
 # install packages
-RUN yum -y update && yum install -y \
+RUN dnf -y update && dnf install -y \
   epel-release \
+  dnf-plugins-core \
+  && dnf config-manager --set-enabled PowerTools \
+  && dnf clean all
+
+RUN dnf -y update && dnf install -y \
   autoconf \
   automake \
   bind-utils \
   bison \
   bzip2 \
   curl-devel \
+  epel-release \
   fftw3 \
   gcc-c++ \
   gdbm-devel \
@@ -29,6 +37,7 @@ RUN yum -y update && yum install -y \
   glibc-headers \
   ImageMagick \
   ImageMagick-devel \
+  langpacks-ja \
   libffi-devel \
   libpng-devel \
   libtool \
@@ -36,24 +45,24 @@ RUN yum -y update && yum install -y \
   libXt \
   libyaml-devel \
   make \
-  mysql-community-client \
-  mysql-community-devel \
+  mysql-devel \
   openssl-devel \
   patch \
-  postgresql11-devel \
+  postgresql13-devel \
   procps \
   readline \
   readline-devel \
   screen \
   sudo \
   tar \
+  util-linux-user \
   vim \
   wget \
-  wgetlibyaml-devel \
+  libyaml-devel \
   zlib \
   zlib-devel \
   zsh \
-  && yum clean all
+  && dnf clean all
 
 # install git lfs
 RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.rpm.sh | sudo bash
@@ -69,8 +78,6 @@ RUN echo "${USER}:${USER}" | chpasswd
 RUN echo "${USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 RUN chsh ${USER} -s /bin/zsh
 
-# locale
-RUN localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
 ENV LANG="ja_JP.UTF-8" LANGUAGE="ja_JP:ja" LC_ALL="ja_JP.UTF-8"
 
 # sqlite3

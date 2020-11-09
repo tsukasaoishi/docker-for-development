@@ -7,25 +7,25 @@ services:
       context: containers/garage
       args:
         USER: ${USER}
-        RUBY_VER: "2.7.1"
-        NODE_VER: "12.16.2"
-        PYTHON_VER: "3.8.2"
-        GO_VER: "1.14.2"
+        RUBY_VER: "2.7.2"
+        NODE_VER: "15.0.1"
+        PYTHON_VER: "3.9.0"
+        GO_VER: "1.15.3"
         GIT_USER: "Tsukasa OISHI"
         GIT_MAILADDRESS: "tsukasa.oishi@gmail.com"
     ports:
       - "3000:3000"
     volumes:
-      - ./data/garage/develop:/home/${USER}/develop:cached
-      - ./data/garage/.ssh:/home/${USER}/.ssh:cached
-      - ./data/garage/.config:/home/${USER}/.config:cached
+      - ./data/garage/develop:/home/${USER}/develop:delegated
+      - ./data/garage/.ssh:/home/${USER}/.ssh:delegated
+      - ./data/garage/.config:/home/${USER}/.config:delegated
     tty: true
 
   percona-db:
     restart: always
     image: percona:8
     volumes:
-      - ./data/percona-db:/var/lib/mysql:cached
+      - ./data/percona-db:/var/lib/mysql:delegated
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_ROOT_PASSWORD: ""
@@ -34,7 +34,7 @@ services:
     restart: always
     image: percona:8
     volumes:
-      - ./data/percona-db-replica:/var/lib/mysql:cached
+      - ./data/percona-db-replica:/var/lib/mysql:delegated
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_ROOT_PASSWORD: ""
@@ -43,18 +43,15 @@ services:
     restart: always
     image: postgres:11
     volumes:
-      - ./data/postgres-db:/var/lib/postgresql/data:cached
+      - ./data/postgres-db:/var/lib/postgresql/data:delegated
     environment:
       POSTGRES_USER: "tsukasa"
       POSTGRES_PASSWORD: ""
 
   memcached:
     restart: always
-    image: memcached:1.5
+    image: memcached:1.6.8
 
   redis:
     restart: always
-    image: redis:5.0
-
-  httpd:
-    image: httpd:latest
+    image: redis:6.0.9
